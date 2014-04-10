@@ -1,0 +1,104 @@
+*FormatToWidth.txt*     Apply the gq command to the selected / count width.
+
+		      FORMAT TO WIDTH    by Ingo Karkat
+							   *FormatToWidth.vim*
+description			|FormatToWidth-description|
+usage				|FormatToWidth-usage|
+installation			|FormatToWidth-installation|
+configuration			|FormatToWidth-configuration|
+integration			|FormatToWidth-integration|
+limitations			|FormatToWidth-limitations|
+known problems			|FormatToWidth-known-problems|
+todo				|FormatToWidth-todo|
+history				|FormatToWidth-history|
+
+==============================================================================
+DESCRIPTION					   *FormatToWidth-description*
+
+This plugin ...
+
+HOW IT WORKS								     *
+
+SOURCE									     *
+
+Inspired by
+    http://stackoverflow.com/questions/22922274/how-does-one-rewrap-text-in-a-column-in-vim
+
+SEE ALSO								     *
+(Plugins offering complementary functionality, or plugins using this library.)
+
+RELATED WORKS								     *
+(Alternatives from other authors, other approaches, references not used here.)
+
+==============================================================================
+USAGE							 *FormatToWidth-usage*
+
+{Visual}<Leader>gq	Linewise selection: Format the selected text to the
+			width of the first selected line / to [count]
+			characters.
+			Blockwise selection: Format the selected text to the
+			width of the block / to [count] characters, and
+			change the selected text in-place. If the reformatted
+			text consists of less lines, the remainder of the
+			block will consist of spaces. If it's more lines,
+			these will be inserted as additional lines,
+			left-aligned with spaces to the start column of the
+			block.
+			Characterwise selection: Format the selected text to
+			the width of the first selected line / to [count]
+			characters, and align all following lines to the start
+			column of the selection.
+
+EXAMPLE						       *FormatToWidth-example*
+
+==============================================================================
+INSTALLATION					  *FormatToWidth-installation*
+
+This script is packaged as a |vimball|. If you have the "gunzip" decompressor
+in your PATH, simply edit the *.vmb.gz package in Vim; otherwise, decompress
+the archive first, e.g. using WinZip. Inside Vim, install by sourcing the
+vimball or via the |:UseVimball| command. >
+    vim FormatToWidth*.vmb.gz
+    :so %
+To uninstall, use the |:RmVimball| command.
+
+DEPENDENCIES					  *FormatToWidth-dependencies*
+
+- Requires Vim 7.0 or higher.
+
+==============================================================================
+CONFIGURATION					 *FormatToWidth-configuration*
+
+For a permanent configuration, put the following commands into your |vimrc|:
+configvar
+							 *FormatToWidth-remap*
+plugmap
+
+==============================================================================
+INTEGRATION					   *FormatToWidth-integration*
+
+==============================================================================
+LIMITATIONS					   *FormatToWidth-limitations*
+
+KNOWN PROBLEMS					*FormatToWidth-known-problems*
+
+TODO							  *FormatToWidth-todo*
+
+IDEAS							 *FormatToWidth-ideas*
+
+==============================================================================
+HISTORY						       *FormatToWidth-history*
+
+GOAL
+First published version.
+
+0.01	10-Apr-2014
+Started development.
+
+==============================================================================
+Copyright: (C) 2014 Ingo Karkat
+The VIM LICENSE applies to this plugin; see |copyright|.
+
+Maintainer:	Ingo Karkat <ingo@karkat.de>
+==============================================================================
+ vim:tw=78:ts=8:ft=help:norl:
