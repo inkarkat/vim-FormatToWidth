@@ -6,7 +6,6 @@ description			|FormatToWidth-description|
 usage				|FormatToWidth-usage|
 installation			|FormatToWidth-installation|
 configuration			|FormatToWidth-configuration|
-integration			|FormatToWidth-integration|
 limitations			|FormatToWidth-limitations|
 known problems			|FormatToWidth-known-problems|
 todo				|FormatToWidth-todo|
@@ -15,24 +14,26 @@ history				|FormatToWidth-history|
 ==============================================================================
 DESCRIPTION					   *FormatToWidth-description*
 
-This plugin ...
+Vim can reformat lines with the |gq| command, according to 'textwidth' and
+'formatoptions', which is very handy. But sometimes you want to format to a
+different width, or just a single block in a vertical column layout. That
+requires a temporary |:setlocal| tw=N, and copying the block elsewhere to
+reformat it, which is cumbersome.
 
-HOW IT WORKS								     *
+This plugin provides a visual mode <Leader>gq command that reformats only the
+selection; how exactly depends on the selection mode. The new width is
+determined by a passed [count], or the width of the first line of the
+selection. With this, you can easily reformat lines to a certain width, or a
+blockwise selection while leaving the text to the left and right alone.
 
 SOURCE									     *
 
 Inspired by
     http://stackoverflow.com/questions/22922274/how-does-one-rewrap-text-in-a-column-in-vim
 
-SEE ALSO								     *
-(Plugins offering complementary functionality, or plugins using this library.)
-
-RELATED WORKS								     *
-(Alternatives from other authors, other approaches, references not used here.)
-
 ==============================================================================
 USAGE							 *FormatToWidth-usage*
-
+								*v_<Leader>gq*
 {Visual}<Leader>gq	Linewise selection: Format the selected text to the
 			width of the first selected line / to [count]
 			characters.
@@ -49,7 +50,29 @@ USAGE							 *FormatToWidth-usage*
 			characters, and align all following lines to the start
 			column of the selection.
 
-EXAMPLE						       *FormatToWidth-example*
+EXAMPLE LINEWISE				       *FormatToWidth-example*
+
+To re-wrap the following text:
+    The quick brown fox jumps over the lazy dog. ~
+to a 'textwidth' of 20, you select the entire line, then reformat to the
+specified width: V20<Leader>gq
+    The quick brown fox ~
+    jumps over the lazy ~
+    dog. ~
+
+EXAMPLE BLOCKWISE							     *
+
+You have a multi-column layout like this:
+    Intro | The quick brown fox       - ~
+          | jumps over the lazy dog.  - (he's very lazy) ~
+Let's reformat the middle column to use all the available space.
+You select the entire column as a block, e.g. with f|l<C-V>t-j, then reformat
+the selection with <Leader>gq:
+    Intro | The quick brown fox jumps - ~
+          | over the lazy dog.        - (he's very lazy) ~
+Okay, but now you want it wider: gv40<Leader>gq reformats to a 40-char column:
+    Intro | The quick brown fox jumps over the lazy - ~
+          | dog.                                    - (he's very lazy) ~
 
 ==============================================================================
 INSTALLATION					  *FormatToWidth-installation*
@@ -65,18 +88,19 @@ To uninstall, use the |:RmVimball| command.
 DEPENDENCIES					  *FormatToWidth-dependencies*
 
 - Requires Vim 7.0 or higher.
+- Requires the |ingo-library.vim| plugin (vimscript #4433), version 1.018 or
+  higher.
 
 ==============================================================================
 CONFIGURATION					 *FormatToWidth-configuration*
 
 For a permanent configuration, put the following commands into your |vimrc|:
-configvar
 							 *FormatToWidth-remap*
-plugmap
-
-==============================================================================
-INTEGRATION					   *FormatToWidth-integration*
-
+If you want to use a different mapping, map your keys to the
+<Plug>(FormatToWidth) mapping target _before_ sourcing the script
+(e.g. in your |vimrc|): >
+    xmap <Leader>gq <Plug>(FormatToWidth)
+<
 ==============================================================================
 LIMITATIONS					   *FormatToWidth-limitations*
 
