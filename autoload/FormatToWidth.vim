@@ -1,7 +1,10 @@
 " FormatToWidth.vim: Apply the gq command to the selected / count width.
 "
 " DEPENDENCIES:
+"   - ingo/buffer/temprange.vim autoload script
 "   - ingo/compat.vim autoload script
+"   - ingo/mbyte/virtcol.vim autoload script
+"   - ingo/register.vim autoload script
 "
 " Copyright: (C) 2014 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
@@ -9,7 +12,10 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.00.002	11-Apr-2014	Complete implementation.
 "	001	10-Apr-2014	file creation
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! FormatToWidth#FormatWithWidth( width, endMotion )
     let l:save_textwidth = &l:textwidth
@@ -74,28 +80,26 @@ endfunction
 function! FormatToWidth#FormatBlock( count )
     normal! gvy
     let l:width = (a:count ? a:count : str2nr(getregtype('')[1:]))
-    let l:emptyLine = repeat(' ', l:width)
 
     let l:originalLines = split(@@, '\n', 1)
     call map(l:originalLines, 'substitute(v:val, "\\s\\+$", "", "")')
     let l:originalLineNum = len(l:originalLines)
 "****D echomsg '****' l:width string(l:originalLines)
-    let l:formattedLines = ingo#buffer#temprange#Execute(l:originalLines, printf('call FormatToWidth#FormatWithWidth(%d, "G")', l:width))
+    let l:formattedLines = ingo#buffer#temprange#Execute(l:originalLines,
+    \   printf('call FormatToWidth#FormatWithWidth(%d, "G")', l:width)
+    \)
     let l:formattedLineNum = len(l:formattedLines)
 "****D echomsg '****' string(l:formattedLines)
-
-    let l:blockLines = l:formattedLines[0 : l:originalLineNum - 1] + repeat([l:emptyLine], (l:originalLineNum - l:formattedLineNum))
-    let l:additionalLines = l:formattedLines[l:originalLineNum :]
-
-    call setreg('', join(l:blockLines, "\n"), "\<C-v>" . l:width)
-    normal! gvP
-
-    if len(l:additionalLines) > 0
-	let l:startVirtCol = ingo#mbyte#virtcol#GetVirtStartColOfCurrentCharacter(line("'<"), col("'<"))
-	let l:indent = repeat(' ', l:startVirtCol - 1)
-	call append("']", map(l:additionalLines, 'l:indent . v:val'))
-	call setpos("']", [0, line("']") + len(l:additionalLines), len(l:additionalLines[-1]), 0])
+    let l:additionalLineNum = l:formattedLineNum - l:originalLineNum
+    if l:additionalLineNum > 0
+	call append("'>", repeat([''], l:additionalLineNum))
+    else
+	let l:formattedLines = l:formattedLines[0 : l:originalLineNum - 1] +
+	\   repeat([''], (l:originalLineNum - l:formattedLineNum + 1))
     endif
+
+    call setreg('', join(l:formattedLines, "\n"), "\<C-v>" . l:width)
+    normal! gvP
 endfunction
 
 function! FormatToWidth#Format( mode )
@@ -109,4 +113,6 @@ function! FormatToWidth#Format( mode )
     endif
 endfunction
 
+let &cpo = s:save_cpo
+unlet s:save_cpo
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
