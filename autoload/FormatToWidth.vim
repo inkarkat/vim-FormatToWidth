@@ -12,6 +12,11 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.00.003	14-Apr-2014	Optimization: Pass 0 undoCnt because inside the
+"				FormatToWidth#FormatBlock() function, no new
+"				undo sequence is created, anyway, so the temp
+"				range has to be explicitly deleted.
+"				Silence the blockwise yanking.
 "   1.00.002	11-Apr-2014	Complete implementation.
 "	001	10-Apr-2014	file creation
 let s:save_cpo = &cpo
@@ -78,7 +83,7 @@ function! FormatToWidth#FormatCharacters( count )
 endfunction
 
 function! FormatToWidth#FormatBlock( count )
-    normal! gvy
+    silent normal! gvy
     let l:width = (a:count ? a:count : str2nr(getregtype('')[1:]))
 
     let l:originalLines = split(@@, '\n', 1)
@@ -86,8 +91,8 @@ function! FormatToWidth#FormatBlock( count )
     let l:originalLineNum = len(l:originalLines)
 "****D echomsg '****' l:width string(l:originalLines)
     let l:formattedLines = ingo#buffer#temprange#Execute(l:originalLines,
-    \   printf('call FormatToWidth#FormatWithWidth(%d, "G")', l:width)
-    \)
+    \   printf('call FormatToWidth#FormatWithWidth(%d, "G")', l:width),
+    \   0)  " Inside a function, no new undo sequence is created.
     let l:formattedLineNum = len(l:formattedLines)
 "****D echomsg '****' string(l:formattedLines)
     let l:additionalLineNum = l:formattedLineNum - l:originalLineNum
