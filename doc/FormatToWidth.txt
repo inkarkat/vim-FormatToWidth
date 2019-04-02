@@ -22,9 +22,9 @@ reformat it, which is cumbersome.
 
 This plugin provides a visual mode <Leader>gq command that reformats only the
 selection; how exactly depends on the selection mode. The new width is
-determined by a passed [count], or the width of the first line of the
-selection. With this, you can easily reformat lines to a certain width, or a
-blockwise selection while leaving the text to the left and right alone.
+determined by a passed [count], or the width of the selection's first line.
+With this, you can easily reformat lines to a certain width, or a blockwise
+selection while leaving the text to the left and right alone.
 
 SOURCE									     *
 
@@ -113,7 +113,7 @@ IDEAS							 *FormatToWidth-ideas*
 ==============================================================================
 HISTORY						       *FormatToWidth-history*
 
-GOAL
+1.00	14-Apr-2014
 First published version.
 
 0.01	10-Apr-2014
