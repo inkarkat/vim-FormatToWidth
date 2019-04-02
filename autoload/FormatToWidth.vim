@@ -6,7 +6,7 @@
 "   - ingo/mbyte/virtcol.vim autoload script
 "   - ingo/register.vim autoload script
 "
-" Copyright: (C) 2014 Ingo Karkat
+" Copyright: (C) 2014-2019 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
@@ -78,8 +78,8 @@ function! FormatToWidth#FormatCharacters( count )
 
     execute l:startLnum . 'join!'
 
-    call setpos("'[", [0, l:startLnum, l:startCol, 0])
-    call setpos("']", [0, l:lastLnum - 1, l:startVirtCol, 0])   " I18N: Can use virtcol as col, because it's just space indent.
+    call setpos("'[", ingo#pos#Make4(l:startLnum, l:startCol))
+    call setpos("']", ingo#pos#Make4(l:lastLnum - 1, l:startVirtCol))   " I18N: Can use virtcol as col, because it's just space indent.
 endfunction
 
 function! FormatToWidth#FormatBlock( count )
