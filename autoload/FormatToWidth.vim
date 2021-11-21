@@ -12,6 +12,7 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.01.004	03-Apr-2019	Refactoring: Use ingo#change#Set().
 "   1.00.003	14-Apr-2014	Optimization: Pass 0 undoCnt because inside the
 "				FormatToWidth#FormatBlock() function, no new
 "				undo sequence is created, anyway, so the temp
@@ -78,8 +79,7 @@ function! FormatToWidth#FormatCharacters( count )
 
     execute l:startLnum . 'join!'
 
-    call setpos("'[", ingo#pos#Make4(l:startLnum, l:startCol))
-    call setpos("']", ingo#pos#Make4(l:lastLnum - 1, l:startVirtCol))   " I18N: Can use virtcol as col, because it's just space indent.
+    call ingo#change#Set([l:startLnum, l:startCol], [l:lastLnum - 1, l:startVirtCol])   " I18N: Can use virtcol as col, because it's just space indent.
 endfunction
 
 function! FormatToWidth#FormatBlock( count )
