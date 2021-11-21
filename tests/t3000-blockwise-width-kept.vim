@@ -1,6 +1,8 @@
 " Test formatting block to kept width.
 " Tests that the remainder of the original block that lost its text is filled with spaces.
 
+call vimtest#SkipAndQuitIf(v:version <= 702, 'The test somehow leads to wrong results of the second processing in Vim 7.2 and earlier')
+
 edit columns.txt
 
 call vimtest#StartTap()
