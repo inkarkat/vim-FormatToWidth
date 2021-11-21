@@ -18,7 +18,7 @@ endif
 let g:loaded_FormatToWidth = 1
 
 vnoremap <silent> <Plug>(FormatToWidth) :<C-u>call setline('.', getline('.'))<Bar>call FormatToWidth#Format(visualmode())<CR>
-if ! hasmapto('<Plug>(FormatToWidth)', 'v')
+if ! hasmapto('<Plug>(FormatToWidth)', 'x')
     xmap <Leader>gq <Plug>(FormatToWidth)
 endif
 
